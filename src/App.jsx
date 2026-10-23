@@ -4,6 +4,8 @@ import RateBoard from "./components/RateBoard";
 import AuthForm from "./components/AuthForm";
 import BookingForm from "./components/BookingForm";
 import MyBookings from "./components/MyBookings";
+import Support from "./components/Support";
+import Footer from "./components/Footer";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -45,6 +47,8 @@ export default function App() {
         onBook={() => setView("book")}
       />
     );
+  } else if (view === "support" && session) {
+    page = <Support userId={session.user.id} />;
   } else {
     page = (
       <main className="mx-auto grid max-w-5xl gap-12 px-6 py-16 md:grid-cols-2 md:px-12">
@@ -67,6 +71,9 @@ export default function App() {
     );
   }
 
+  const link =
+    "underline decoration-2 underline-offset-4 hover:decoration-signal";
+
   return (
     <div className="min-h-screen">
       <header className="flex items-baseline justify-between border-b border-ink/20 px-6 py-4 md:px-12">
@@ -77,31 +84,26 @@ export default function App() {
           Gasveno
         </button>
         {session ? (
-          <span className="flex items-baseline gap-6 text-lg">
-            <button
-              onClick={() => setView("orders")}
-              className="underline decoration-2 underline-offset-4 hover:decoration-signal"
-            >
+          <span className="flex items-baseline gap-5 text-lg md:gap-6">
+            <button onClick={() => setView("orders")} className={link}>
               Orders
             </button>
-            {session.user.email}
-            <button
-              onClick={() => supabase.auth.signOut()}
-              className="underline decoration-2 underline-offset-4 hover:decoration-signal"
-            >
+            <button onClick={() => setView("support")} className={link}>
+              Support
+            </button>
+            <span className="hidden md:inline">{session.user.email}</span>
+            <button onClick={() => supabase.auth.signOut()} className={link}>
               Sign out
             </button>
           </span>
         ) : (
-          <button
-            onClick={() => setView("auth")}
-            className="text-lg underline decoration-2 underline-offset-4 hover:decoration-signal"
-          >
+          <button onClick={() => setView("auth")} className={`text-lg ${link}`}>
             Sign in
           </button>
         )}
       </header>
       {page}
+      <Footer />
     </div>
   );
 }
