@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1c3144;
+  --color-canvas: #eef1f3;
+  --color-signal: #f5a623;
+  --color-delivered: #3b9b6f;
+  --color-urgent: #d64545;
+  --font-serif: "Times New Roman", Times, serif;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-serif);
+  }
+  h1, h2 {
+    letter-spacing: -0.02em;
+  }
+}
