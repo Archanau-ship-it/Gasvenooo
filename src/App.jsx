@@ -3,6 +3,7 @@ import { supabase } from "./lib/supabase";
 import RateBoard from "./components/RateBoard";
 import AuthForm from "./components/AuthForm";
 import BookingForm from "./components/BookingForm";
+import MyBookings from "./components/MyBookings";
 
 export default function App() {
   const [session, setSession] = useState(null);
@@ -31,7 +32,19 @@ export default function App() {
   if (view === "auth" && !session) {
     page = <AuthForm />;
   } else if (view === "book" && session) {
-    page = <BookingForm userId={session.user.id} onDone={() => setView("home")} />;
+    page = (
+      <BookingForm
+        userId={session.user.id}
+        onDone={() => setView("orders")}
+      />
+    );
+  } else if (view === "orders" && session) {
+    page = (
+      <MyBookings
+        userId={session.user.id}
+        onBook={() => setView("book")}
+      />
+    );
   } else {
     page = (
       <main className="mx-auto grid max-w-5xl gap-12 px-6 py-16 md:grid-cols-2 md:px-12">
@@ -65,6 +78,12 @@ export default function App() {
         </button>
         {session ? (
           <span className="flex items-baseline gap-6 text-lg">
+            <button
+              onClick={() => setView("orders")}
+              className="underline decoration-2 underline-offset-4 hover:decoration-signal"
+            >
+              Orders
+            </button>
             {session.user.email}
             <button
               onClick={() => supabase.auth.signOut()}
